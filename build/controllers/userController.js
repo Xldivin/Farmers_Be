@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { dbConnect } from '../db/index.js';
-import { ObjectId } from 'mongodb';
 export const createUser = () => {
     return (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const db = yield dbConnect();
@@ -35,19 +34,8 @@ export const login = () => {
     return (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const db = yield dbConnect();
         const { email, password } = req.body;
-        const id = req.params.id;
-        const user = yield (db === null || db === void 0 ? void 0 : db.users.findOne({ _id: new ObjectId(id) }));
-        if (!user) {
-            const errorResponse = { error: 'Invalid email or password' };
-            res.status(401).json(errorResponse);
-            return;
-        }
-        if (password !== user.password) {
-            const errorResponse = { error: 'Invalid email or password' };
-            res.status(401).json(errorResponse);
-            return;
-        }
-        if (email !== user.email) {
+        const user = yield (db === null || db === void 0 ? void 0 : db.users.findOne({ email: email }));
+        if (!user || user.password !== password) {
             const errorResponse = { error: 'Invalid email or password' };
             res.status(401).json(errorResponse);
             return;
