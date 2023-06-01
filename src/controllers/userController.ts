@@ -30,32 +30,21 @@ export const createUser = () => {
 };
 
 export const login = () => {
-    return async (req: Request, res: Response) => {
-      const db = await dbConnect();
-      const { email, password } = req.body;
-      const id = req.params.id;
-  
-      const user = await db?.users.findOne({ _id: new ObjectId(id)});
-  
-      if (!user) {
-        const errorResponse = { error: 'Invalid email or password' };
-        res.status(401).json(errorResponse);
-        return;
-      }
-      if (password !== user.password) {
-        const errorResponse = { error: 'Invalid email or password' };
-        res.status(401).json(errorResponse);
-        return;
-      }
+  return async (req: Request, res: Response) => {
+    const db = await dbConnect();
+    const { email, password } = req.body;
 
-      if (email !== user.email) {
-        const errorResponse = { error: 'Invalid email or password' };
-        res.status(401).json(errorResponse);
-        return;
-      }
-  
-      const response = { user, status: 200 };
-      res.status(response.status).json(response);
-    };
+    const user = await db?.users.findOne({ email: email });
+
+    if (!user || user.password !== password) {
+      const errorResponse = { error: 'Invalid email or password' };
+      res.status(401).json(errorResponse);
+      return;
+    }
+
+    const response = { user, status: 200 };
+    res.status(response.status).json(response);
+  };
 };
+
   
