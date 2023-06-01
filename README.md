@@ -11,14 +11,14 @@ This project involves developing a system for farmers and an agro-input store to
 ## Installation
 
 You must have different tools in your development environment.
-1.you should have nodejs in your environment
-2.you should run npm install.
-3.2.you should run npm build.
-3.clone the repo [https://github.com/Xldivin/Farmers_Be]
+-you should have nodejs in your environment
+-you should run npm install.
+-you should run npm build.
+-clone the repo [https://github.com/Xldivin/Farmers_Be]
 
 
 ## Features
 
-1.Sign up and Login.
-2. orders endpoints.
-3. user endpoints.
+-Sign up and Login.
+-orders endpoints.
+-user endpoints.
