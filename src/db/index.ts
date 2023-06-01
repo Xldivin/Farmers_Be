@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 
 dotenv.config();
 
-const dbUri = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const dbUri = process.env.MONGO_URI || 'mongodb+srv://Divin:axel123@cluster0.rwph7ck.mongodb.net/?retryWrites=true&w=majority';
 
 const client = new MongoClient(dbUri);
 

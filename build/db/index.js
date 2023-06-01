@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import dotenv from 'dotenv';
 import { MongoClient } from 'mongodb';
 dotenv.config();
-const dbUri = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const dbUri = process.env.MONGO_URI || 'mongodb+srv://Divin:axel123@cluster0.rwph7ck.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(dbUri);
 export function dbConnect() {
     return __awaiter(this, void 0, void 0, function* () {
