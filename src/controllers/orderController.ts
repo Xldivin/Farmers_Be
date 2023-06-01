@@ -73,18 +73,24 @@ export const getOrders = () => {
 export const acceptOrder = () => {
   return async (req: Request, res: Response) => {
     const db = await dbConnect();
-    const orderId = req.params.orderId
+    const orderId = req.params.orderId;
 
     const order = await db?.orders.findOne({ _id: new ObjectId(orderId) });
     if (!order) {
       const errorResponse = { error: 'Order not found.' };
       res.status(404).json(errorResponse);
-      return; 
+      return;
     }
 
-    const updateStatus =  'accepted'
+    if (!order.isPaid) {
+      const errorResponse = { error: 'Order payment is not completed.' };
+      res.status(400).json(errorResponse);
+      return;
+    }
+
+    const updateStatus = 'accepted';
     const updatedOrder = await db?.orders.updateOne(
-      {_id: new ObjectId(orderId) },
+      { _id: new ObjectId(orderId), isPaid: true },
       { $set: { status: updateStatus } }
     );
 
@@ -92,12 +98,14 @@ export const acceptOrder = () => {
       console.log("Failed to update order status.");
       const errorResponse = { error: 'Failed to update order status.' };
       res.status(400).json(errorResponse);
+      return;
     }
 
     const response = { data: { order }, status: 200 };
     res.status(response.status).json(response);
   };
 };
+
 
 export const getOrder = () => {
   return async (req: Request, res: Response) => {

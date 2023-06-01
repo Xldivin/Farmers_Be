@@ -75,12 +75,18 @@ export const acceptOrder = () => {
             res.status(404).json(errorResponse);
             return;
         }
+        if (!order.isPaid) {
+            const errorResponse = { error: 'Order payment is not completed.' };
+            res.status(400).json(errorResponse);
+            return;
+        }
         const updateStatus = 'accepted';
-        const updatedOrder = yield (db === null || db === void 0 ? void 0 : db.orders.updateOne({ _id: new ObjectId(orderId) }, { $set: { status: updateStatus } }));
+        const updatedOrder = yield (db === null || db === void 0 ? void 0 : db.orders.updateOne({ _id: new ObjectId(orderId), isPaid: true }, { $set: { status: updateStatus } }));
         if (!updatedOrder) {
             console.log("Failed to update order status.");
             const errorResponse = { error: 'Failed to update order status.' };
             res.status(400).json(errorResponse);
+            return;
         }
         const response = { data: { order }, status: 200 };
         res.status(response.status).json(response);
