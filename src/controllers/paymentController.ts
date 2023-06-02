@@ -10,7 +10,7 @@ const stripeInstance = new stripe('sk_test_51NDsFIAtBcpHWb8jWy3pXohalapfOpnhc5xb
 export const makePayment = () => {
   return async (req: Request, res: Response) => {
     try {
-      const { amount, token } = req.body;
+      const { amount, token, orderId } = req.body;
 
       const customer = await stripeInstance.customers.create({
         source: token.id,
@@ -23,9 +23,8 @@ export const makePayment = () => {
         currency: 'USD',
         customer: customer.id,
       });
-      
+
       const db = await dbConnect();
-      const orderId = req.params.orderId;
 
       const updateResult = await db?.orders.updateOne(
         { _id: new ObjectId(orderId) },

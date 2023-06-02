@@ -8,13 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import stripe from 'stripe';
+import { dbConnect } from '../db/index.js';
+import { ObjectId } from 'mongodb';
 const stripeInstance = new stripe('sk_test_51NDsFIAtBcpHWb8jWy3pXohalapfOpnhc5xbl75jpcZChSt3Til8iFbmnPwgNP6zzSIcP7JbdYbZCXdiZTjq9o8300DISaFJ8K', {
     apiVersion: '2022-11-15',
 });
 export const makePayment = () => {
     return (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const { amount, token } = req.body;
+            const { amount, token, orderId } = req.body;
             const customer = yield stripeInstance.customers.create({
                 source: token.id,
                 name: token.card.name,
@@ -25,6 +27,14 @@ export const makePayment = () => {
                 currency: 'USD',
                 customer: customer.id,
             });
+            const db = yield dbConnect();
+            const updateResult = yield (db === null || db === void 0 ? void 0 : db.orders.updateOne({ _id: new ObjectId(orderId) }, { $set: { isPaid: true } }));
+            if (!updateResult) {
+                console.log('Failed to update the order');
+                const errorResponse = { error: 'Failed to update the order' };
+                res.status(400).json(errorResponse);
+                return;
+            }
             res.status(200).json({ success: true, charge });
         }
         catch (error) {
