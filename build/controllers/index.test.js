@@ -28,25 +28,25 @@ test('should get all order successfully', () => __awaiter(void 0, void 0, void 0
 }), 25000);
 test('should create a User successfully', () => __awaiter(void 0, void 0, void 0, function* () {
     const user = {
-        firstName: "agro",
-        lastName: "input",
-        email: "agro@gmail.com",
+        firstName: "gabby",
+        lastName: "axel",
+        email: "gabby@gmail.com",
         password: "12345",
-        role: "admin"
+        role: "user"
     };
     const response = yield request(app).post('/api/v1/signup').send(user);
     expect(response.status).toEqual(201);
 }), 25000);
 test('should create a User successfully', () => __awaiter(void 0, void 0, void 0, function* () {
     const user = {
-        firstName: "agro",
-        lastName: "input",
-        email: "hirwa@gmail.com",
+        firstName: "rubona",
+        lastName: "axel",
+        email: "rubona@gmail.com",
         password: "12345",
-        role: "admin"
+        role: "user"
     };
     const userLog = {
-        email: "hirwa@gmail.com",
+        email: "rubona@gmail.com",
         password: "12345",
     };
     const response = yield request(app).post('/api/v1/signup').send(user);

@@ -23,11 +23,11 @@ test('should get all order successfully', async () => {
 
 test('should create a User successfully', async () => {
     const user = {
-        firstName: "agro",
-        lastName: "input",
-        email: "agro@gmail.com",
+        firstName: "gabby",
+        lastName: "axel",
+        email: "gabby@gmail.com",
         password: "12345",
-        role: "admin"
+        role: "user"
     };
     const response = await request(app).post('/api/v1/signup').send(user);
     expect(response.status).toEqual(201);
@@ -35,14 +35,14 @@ test('should create a User successfully', async () => {
 
 test('should create a User successfully', async () => {
     const user = {
-        firstName: "agro",
-        lastName: "input",
-        email: "hirwa@gmail.com",
+        firstName: "rubona",
+        lastName: "axel",
+        email: "rubona@gmail.com",
         password: "12345",
-        role: "admin"
+        role: "user"
     };
     const userLog = {
-        email: "hirwa@gmail.com",
+        email: "rubona@gmail.com",
         password: "12345",
     };
     const response = await request(app).post('/api/v1/signup').send(user);
