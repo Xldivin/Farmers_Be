@@ -7,26 +7,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { dbConnect } from '../db/index.js';
+import { dbConnect } from "../db/index.js";
+import { sendEmail } from "../utils/sendEmail.js";
 export const createUser = () => {
     return (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const db = yield dbConnect();
         const { firstName, lastName, email, password, role } = req.body;
+        const existingUser = yield (db === null || db === void 0 ? void 0 : db.users.findOne({ email: email }));
+        if (existingUser) {
+            const errorResponse = { error: 'The user already exists' };
+            res.status(409).json(errorResponse); // 409 Conflict status code
+            return;
+        }
         const newUser = {
             firstName,
             lastName,
             email,
             password,
-            role
+            role,
         };
-        const users = yield (db === null || db === void 0 ? void 0 : db.users.insertOne(newUser));
-        if (!users) {
-            console.log("request failed");
-            const errorResponse = { error: 'request failed' };
+        const result = yield (db === null || db === void 0 ? void 0 : db.users.insertOne(newUser));
+        if (!result) {
+            console.log("Request failed");
+            const errorResponse = { error: "Request failed" };
             res.status(400).json(errorResponse);
             return;
         }
         const response = { data: newUser, status: 201 };
+        sendEmail(newUser);
         res.status(response.status).json(response);
     });
 };
@@ -35,9 +43,15 @@ export const login = () => {
         const db = yield dbConnect();
         const { email, password } = req.body;
         const user = yield (db === null || db === void 0 ? void 0 : db.users.findOne({ email: email }));
-        if (!user || user.password !== password) {
-            const errorResponse = { error: 'Invalid email or password' };
+        console.log("Existing User:", user);
+        if (!user) {
+            const errorResponse = { error: "Invalid email or password" };
             res.status(401).json(errorResponse);
+            return;
+        }
+        if ((user === null || user === void 0 ? void 0 : user.password) !== password) {
+            const errorResponse = { error: "The password is not correct" };
+            res.status(400).json(errorResponse);
             return;
         }
         const response = { user, status: 200 };

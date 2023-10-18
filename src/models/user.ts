@@ -3,5 +3,5 @@ export interface IUser  {
     lastName: string;
     email: string;
     password: string
-    role?: "admin" | "user";
+    role?: string;
 }

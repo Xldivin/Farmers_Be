@@ -6,6 +6,6 @@ export interface IOrder  {
   seeds: string;
   seedsQuantity: number;
   isPaid: boolean;
-  status:  "pending" | "accepted" | "rejected";
+  status: string;
   amountToBePaid: number
 }
